@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:cryptography"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <local:BoolToVisConverter x:Key="BoolToVis" />
     </Application.Resources>
 </Application>

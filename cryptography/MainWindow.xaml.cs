@@ -1,13 +1,5 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace cryptography;
 
@@ -16,8 +8,54 @@ namespace cryptography;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private readonly MainViewModel vm;
+    private readonly Uri _darkTheme = new Uri("Themes/DarkTheme.xaml", UriKind.Relative);
+    private readonly Uri _lightTheme = new Uri("Themes/LightTheme.xaml", UriKind.Relative);
+
+
     public MainWindow()
     {
         InitializeComponent();
+
+        if (DataContext is not MainViewModel vm)
+        {
+            vm = new MainViewModel();
+            DataContext = vm;
+        }
+
+        // Listen for theme change
+        if (DataContext is MainViewModel model)
+            model.ThemeChanged += (_, _) => ApplyTheme(model.IsDarkMode);
+
+        // Set default
+        ApplyTheme(true);
+    }
+    
+    // PasswordBox can't bind to Password directly for security reasons; relay changes into ViewModel
+    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel mvm && sender is PasswordBox pb)
+        {
+            mvm.Password = pb.Password;
+        }
+    }
+    
+    private void ApplyTheme(bool isDark)
+    {
+        var dict = new ResourceDictionary
+        {
+            Source = isDark ? _darkTheme : _lightTheme
+        };
+
+        // Remove old theme dictionary
+        var existing = Application.Current.Resources.MergedDictionaries
+            .FirstOrDefault(d => d.Source != null &&
+                                 (d.Source.OriginalString.Contains("DarkTheme.xaml") ||
+                                  d.Source.OriginalString.Contains("LightTheme.xaml")));
+
+        if (existing != null)
+            Application.Current.Resources.MergedDictionaries.Remove(existing);
+
+        Application.Current.Resources.MergedDictionaries.Add(dict);
     }
 }
