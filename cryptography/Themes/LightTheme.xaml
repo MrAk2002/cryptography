@@ -13,11 +13,19 @@
     <Color x:Key="ControlBackgroundColor">#FF2D2D30</Color>
     <Color x:Key="ControlBorderColor">#FF3F3F46</Color>
 
+    <Color x:Key="ComboItemBackgroundColor">#FF2D2D30</Color>
+    <Color x:Key="ComboItemHoverColor">#FF3794FF</Color>
+    <Color x:Key="ComboItemForegroundColor">#FFFFFFFF</Color>
+
+
     <!-- Brushes -->
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
     <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}" />
     <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
     <SolidColorBrush x:Key="ControlBackgroundBrush" Color="{StaticResource ControlBackgroundColor}" />
     <SolidColorBrush x:Key="ControlBorderBrush" Color="{StaticResource ControlBorderColor}" />
+    <SolidColorBrush x:Key="ComboItemBackgroundBrush" Color="{StaticResource ComboItemBackgroundColor}" />
+    <SolidColorBrush x:Key="ComboItemHoverBrush" Color="{StaticResource ComboItemHoverColor}" />
+    <SolidColorBrush x:Key="ComboItemForegroundBrush" Color="{StaticResource ComboItemForegroundColor}" />
 
 </ResourceDictionary>
