@@ -86,7 +86,7 @@ public class MainViewModel: INotifyPropertyChanged {
       }
     }
   }
-  public event EventHandler ? ThemeChanged;
+  public event EventHandler? ThemeChanged;
   public string ThemeButtonText => IsDarkMode ? "🌙 Dark Mode" : "☀ Light Mode";
   private string _keyDisplay;
   public string KeyDisplay {

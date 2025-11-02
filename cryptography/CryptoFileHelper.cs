@@ -90,14 +90,7 @@ public static class CryptoFileHelper
         using var cipher = CreateSymmetricAlgorithm(alg, CipherModeChoice.Cbc);
         return RandomNumberGenerator.GetBytes(cipher.KeySize / 8);
     }
-
-    // Save/Load key helpers (Base64)
-    public static void SaveKeyAsBase64(string path, byte[] key) =>
-        File.WriteAllText(path, Convert.ToBase64String(key));
-
-    public static byte[] LoadKeyFromBase64(string path) =>
-        Convert.FromBase64String(File.ReadAllText(path));
-
+    
     #endregion
 
     #region Internals (streaming encryption/decryption)
@@ -152,9 +145,7 @@ public static class CryptoFileHelper
 
         // set mode
         cipher.Mode = modeChoice == CipherModeChoice.Cbc ? CipherMode.CBC : CipherMode.ECB;
-
-        // Recommended: use 128-bit AES by default (but default cipher.KeySize may vary by provider).
-        // We honor provider defaults (AES typically supports 128/192/256) — ensure key length matches when using raw key.
+        
         return cipher;
     }
 
