@@ -26,11 +26,10 @@ public class ModeItem {
   }
 }
 public class MainViewModel: INotifyPropertyChanged {
-  public event PropertyChangedEventHandler PropertyChanged;
-  protected void OnPropertyChanged([CallerMemberName] string ? propertyName = null) {
+  public event PropertyChangedEventHandler? PropertyChanged;
+  protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) {
     PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
   }
-  private void Raise(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
   public ObservableCollection < AlgoItem > Algorithms {
     get;
   } = [new AlgoItem {
@@ -40,6 +39,7 @@ public class MainViewModel: INotifyPropertyChanged {
   }, new AlgoItem {
     Name = "3DES", Value = CryptoFileHelper.CipherAlgorithm.TripleDes
   }];
+  
   public ObservableCollection < ModeItem > Modes {
     get;
   } = [new ModeItem {
@@ -47,23 +47,29 @@ public class MainViewModel: INotifyPropertyChanged {
   }, new ModeItem {
     Name = "ECB", Value = CryptoFileHelper.CipherModeChoice.Ecb
   }];
+  
   private AlgoItem _selectedAlgorithm;
+  
   public AlgoItem SelectedAlgorithm {
     get => _selectedAlgorithm ?? Algorithms[0];
     set {
       _selectedAlgorithm = value;
-      Raise(nameof(SelectedAlgorithm));
+      OnPropertyChanged();
     }
   }
+  
   private ModeItem _selectedMode;
+  
   public ModeItem SelectedMode {
     get => _selectedMode ?? Modes[0];
     set {
       _selectedMode = value;
-      Raise(nameof(SelectedMode));
+      OnPropertyChanged();
     }
   }
+  
   private string _inputFilePath;
+  
   public string ? InputFilePath {
     get => _inputFilePath;
     set {
@@ -75,7 +81,9 @@ public class MainViewModel: INotifyPropertyChanged {
       }
     }
   }
+  
   private bool _isDarkMode = true;
+  
   public bool IsDarkMode {
     get => _isDarkMode;
     set {
@@ -86,61 +94,78 @@ public class MainViewModel: INotifyPropertyChanged {
       }
     }
   }
+  
   public event EventHandler? ThemeChanged;
-  public string ThemeButtonText => IsDarkMode ? "🌙 Dark Mode" : "☀ Light Mode";
+  
+  public string ThemeButtonText => IsDarkMode ? "☀ Light Mode" : "🌙 Dark Mode";
+  
   private string _keyDisplay;
+  
   public string KeyDisplay {
     get => _keyDisplay;
     set {
       _keyDisplay = value;
-      Raise(nameof(KeyDisplay));
+      OnPropertyChanged();
     }
   }
+  
   private bool _usePassword = true;
+  
   public bool UsePassword {
     get => _usePassword;
     set {
       _usePassword = value;
-      Raise(nameof(UsePassword));
+      OnPropertyChanged();
     }
   }
+  
   private string _password = string.Empty;
+  
   public string Password {
     get => _password;
     set {
       _password = value;
-      Raise(nameof(Password));
+      OnPropertyChanged();
     }
   }
-  private bool _isBusy = false;
+  
+  private bool _isBusy;
+  
   public bool IsBusy {
     get => _isBusy;
     set {
       _isBusy = value;
-      Raise(nameof(IsBusy));
+      OnPropertyChanged();
+      EncryptCommand?.RaiseCanExecuteChanged();
+      DecryptCommand?.RaiseCanExecuteChanged();
     }
   }
+  
   private string _statusMessage = "Ready";
+  
   public string StatusMessage {
     get => _statusMessage;
     set {
       _statusMessage = value;
-      Raise(nameof(StatusMessage));
+      OnPropertyChanged();
     }
   }
+  
   private bool _isKeyGenerated;
+  
   public bool IsKeyGenerated {
     get => _isKeyGenerated;
     set {
       if (_isKeyGenerated != value) {
         _isKeyGenerated = value;
-        OnPropertyChanged(nameof(IsKeyGenerated));
+        OnPropertyChanged();
         ExportKeyCommand?.RaiseCanExecuteChanged();
         EncryptCommand?.RaiseCanExecuteChanged();
         DecryptCommand?.RaiseCanExecuteChanged();
       }
     }
   } // Commands
+  
   public RelayCommand BrowseInputCommand {
     get;
   }
@@ -165,24 +190,27 @@ public class MainViewModel: INotifyPropertyChanged {
   public RelayCommand ToggleThemeCommand {
     get;
   }
+  
   private byte[] _currentKey = null;
-  // raw key bytes if user generated/imported
+  
   public MainViewModel() {
     BrowseInputCommand = new RelayCommand(_ => BrowseInput());
-    ClearInputCommand = new RelayCommand(_ => {
-      InputFilePath = null;
-    });
+    ClearInputCommand = new RelayCommand(_ => { InputFilePath = null; });
     GenerateKeyCommand = new RelayCommand(_ => GenerateKey());
     ImportKeyCommand = new RelayCommand(_ => ImportKey());
     ExportKeyCommand = new RelayCommand(_ => ExportKey(), _ => _currentKey != null);
-    EncryptCommand = new RelayCommand(async _ => await EncryptAsync(), _ => IsKeyGenerated && !string.IsNullOrEmpty(InputFilePath) && !IsBusy);
-    DecryptCommand = new RelayCommand(async _ => await DecryptAsync(), _ => IsKeyGenerated && !string.IsNullOrEmpty(InputFilePath) && !IsBusy);
+    EncryptCommand = new RelayCommand(async _ =>
+      await EncryptAsync(), _ => IsKeyGenerated && !string.IsNullOrEmpty(InputFilePath) && !IsBusy);
+    DecryptCommand = new RelayCommand(async _ =>
+      await DecryptAsync(), _ => IsKeyGenerated && !string.IsNullOrEmpty(InputFilePath) && !IsBusy);
     ToggleThemeCommand = new RelayCommand(_ => ToggleTheme());
   }
+  
   private void BrowseInput() {
     var ofd = new OpenFileDialog();
     if (ofd.ShowDialog() == true) InputFilePath = ofd.FileName;
   }
+  
   private void GenerateKey() {
     try {
       var key = CryptoFileHelper.GenerateRandomKey(SelectedAlgorithm.Value);
@@ -194,6 +222,7 @@ public class MainViewModel: INotifyPropertyChanged {
       StatusMessage = "Error generating key: " + ex.Message;
     }
   }
+  
   private void ImportKey() {
     var ofd = new OpenFileDialog {
       Filter = "Key files (*.txt;*.key)|*.txt;*.key|All files (*.*)|*.*"
@@ -211,6 +240,7 @@ public class MainViewModel: INotifyPropertyChanged {
       }
     }
   }
+  
   private void ExportKey() {
     var sfd = new SaveFileDialog {
       FileName = "key.txt", Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*"
@@ -224,13 +254,13 @@ public class MainViewModel: INotifyPropertyChanged {
       }
     }
   }
+  
   private async Task EncryptAsync() {
     IsBusy = true;
     StatusMessage = "Encrypting...";
     try {
       if (Path.GetFileName(InputFilePath) !.Contains('(')) {
         StatusMessage = "the file name could not have '(' or ')'";
-        IsBusy = false;
         return;
       }
       var sfd = new SaveFileDialog {
@@ -256,6 +286,7 @@ public class MainViewModel: INotifyPropertyChanged {
       IsBusy = false;
     }
   }
+  
   private async Task DecryptAsync() {
     IsBusy = true;
     StatusMessage = "Decrypting...";
@@ -266,8 +297,8 @@ public class MainViewModel: INotifyPropertyChanged {
       if (match.Success) {
         res = match.Groups[1].Value;
       } else {
-        IsBusy = false;
-        StatusMessage = "Error";
+        StatusMessage = "File Name Corrupted";
+        return;
       }
       var sfd = new SaveFileDialog {
         FileName = res, Filter = "All files (*.*)|*.*"
@@ -292,6 +323,7 @@ public class MainViewModel: INotifyPropertyChanged {
       IsBusy = false;
     }
   }
+  
   private void ToggleTheme() {
     IsDarkMode = !IsDarkMode;
     ThemeChanged?.Invoke(this, EventArgs.Empty);

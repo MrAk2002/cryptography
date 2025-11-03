@@ -5,17 +5,16 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="BaseTheme.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
-    <!-- Light colors -->
-    <Color x:Key="BackgroundColor">#FFFDFDFD</Color>
-    <Color x:Key="ForegroundColor">#FF1E1E1E</Color>
+    
+    <!-- Dark colors -->
+    <Color x:Key="BackgroundColor">#FF1E1E1E</Color>
+    <Color x:Key="ForegroundColor">#FFFFFFFF</Color>
     <Color x:Key="AccentColor">#FF0078D7</Color>
-    <Color x:Key="ControlBackgroundColor">#FFFFFFFF</Color>
-    <Color x:Key="ControlBorderColor">#FFCCCCCC</Color>
-
-    <Color x:Key="ComboItemBackgroundColor">#FFFFFFFF</Color>
-    <Color x:Key="ComboItemHoverColor">#FF0078D7</Color>
-    <Color x:Key="ComboItemForegroundColor">#FF000000</Color>
+    <Color x:Key="ControlBackgroundColor">#FF2D2D30</Color>
+    <Color x:Key="ControlBorderColor">#FF3F3F46</Color>
+    <Color x:Key="ComboItemBackgroundColor">#FF2D2D30</Color>
+    <Color x:Key="ComboItemHoverColor">#FF3794FF</Color>
+    <Color x:Key="ComboItemForegroundColor">#FFFFFFFF</Color>
 
 
     <!-- Brushes -->

@@ -1,6 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
+
+namespace cryptography;
 
 public static class CryptoFileHelper
 {
@@ -8,8 +9,8 @@ public static class CryptoFileHelper
     public enum CipherModeChoice { Cbc, Ecb }
 
     // Configurable defaults
-    public const int SaltSize = 16;            // bytes
-    public const int Pbkdf2Iterations = 100_000;
+    private const int SaltSize = 16;            // bytes
+    private const int Pbkdf2Iterations = 100_000;
 
     #region Public API
 

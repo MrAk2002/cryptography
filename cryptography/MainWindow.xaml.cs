@@ -9,8 +9,8 @@ namespace cryptography;
 public partial class MainWindow : Window
 {
     private readonly MainViewModel vm;
-    private readonly Uri _darkTheme = new Uri("Themes/DarkTheme.xaml", UriKind.Relative);
-    private readonly Uri _lightTheme = new Uri("Themes/LightTheme.xaml", UriKind.Relative);
+    private readonly Uri _darkTheme = new("Themes/DarkTheme.xaml", UriKind.Relative);
+    private readonly Uri _lightTheme = new("Themes/LightTheme.xaml", UriKind.Relative);
 
 
     public MainWindow()
@@ -46,8 +46,7 @@ public partial class MainWindow : Window
         {
             Source = isDark ? _darkTheme : _lightTheme
         };
-
-        // Remove old theme dictionary
+        
         var existing = Application.Current.Resources.MergedDictionaries
             .FirstOrDefault(d => d.Source != null &&
                                  (d.Source.OriginalString.Contains("DarkTheme.xaml") ||
